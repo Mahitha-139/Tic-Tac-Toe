@@ -1,0 +1,75 @@
+"""
+Tic-Tac-Toe Game
+A simple, interactive terminal-based Tic-Tac-Toe game for two players.
+"""
+
+def print_board(board):
+    """Prints the current state of the game board."""
+    print("\n")
+    print(f" {board[0]} | {board[1]} | {board[2]} ")
+    print("---|---|---")
+    print(f" {board[3]} | {board[4]} | {board[5]} ")
+    print("---|---|---")
+    print(f" {board[6]} | {board[7]} | {board[8]} ")
+    print("\n")
+
+def check_win(board, player):
+    """Checks if the specified player has won the game."""
+    win_conditions = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8],  # Horizontal rows
+        [0, 3, 6], [1, 4, 7], [2, 5, 8],  # Vertical columns
+        [0, 4, 8], [2, 4, 6]              # Diagonals
+    ]
+    for condition in win_conditions:
+        if board[condition[0]] == board[condition[1]] == board[condition[2]] == player:
+            return True
+    return False
+
+def check_tie(board):
+    """Checks if the game is a tie (board full with no winner)."""
+    return " " not in board
+
+def get_move(player, board):
+    """Prompts the player for a valid move between 1 and 9."""
+    while True:
+        try:
+            move = int(input(f"Player {player}, enter your move (1-9): ")) - 1
+            if move < 0 or move > 8:
+                print("Invalid input. Please choose a number between 1 and 9.")
+            elif board[move] != " ":
+                print("That spot is already taken! Try another one.")
+            else:
+                return move
+        except ValueError:
+            print("Invalid input. Please enter a valid number.")
+
+def main():
+    """Main function to control the game flow."""
+    print("Welcome to Tic Tac Toe!")
+    print("Positions are numbered 1 through 9 as follows:")
+    print(" 1 | 2 | 3 \n---|---|---\n 4 | 5 | 6 \n---|---|---\n 7 | 8 | 9 ")
+    
+    # Initialize an empty board
+    board = [" "] * 9
+    current_player = "X"
+    game_over = False
+
+    while not game_over:
+        print_board(board)
+        move = get_move(current_player, board)
+        board[move] = current_player
+
+        if check_win(board, current_player):
+            print_board(board)
+            print(f"🎉 Congratulations! Player {current_player} wins! 🎉")
+            game_over = True
+        elif check_tie(board):
+            print_board(board)
+            print("🤝 It's a tie game!")
+            game_over = True
+        else:
+            # Switch players
+            current_player = "O" if current_player == "X" else "X"
+
+if __name__ == "__main__":
+    main()
